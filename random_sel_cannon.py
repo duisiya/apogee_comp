@@ -1,14 +1,10 @@
 
 # coding: utf-8
 
-# In[1]:
 
 from astropy.io import fits
 import numpy as np
 import random
-
-
-# In[2]:
 
 #clean cannon DR 14: no bad or warn stars, no high persistence
 cannon_fits = fits.open('cannon_14_clean_all.fits')
@@ -17,14 +13,6 @@ cannon = cannon_fits[1].data
 #Troup's sample with cannon abundances
 troup_fits = fits.open('troup_cannon.fits')
 troup = troup_fits[1].data
-
-
-# In[14]:
-
-len(troup)
-
-
-# In[10]:
 
 id_array = []
 d = 0
@@ -67,8 +55,6 @@ for l in troup: #individual Troup's star for which we are looking for counterpar
                 id_array.append([masked[r]['APOGEE_ID'], masked[r]['RA'], masked[r]['DEC']])
                 n = n + 1
 
-                
-
     #trivial here
     elif len(masked) > 10:
         print l['APOGEE_ID'], len(masked)
@@ -82,51 +68,22 @@ for l in troup: #individual Troup's star for which we are looking for counterpar
     
 
 
-# In[17]:
 
 col1 = fits.Column(name='APOGEE_ID', format='18A', array=np.asarray(id_array)[:,0])
 col2 = fits.Column(name='RA', format='D', array=np.asarray(id_array)[:,1])
 col3 = fits.Column(name='DEC', format='D', array=np.asarray(id_array)[:,2])
-
-
-# In[19]:
-
 cols = fits.ColDefs([col1, col2, col3])
-
-
-# In[20]:
-
 test_sample = fits.BinTableHDU.from_columns(cols)
-
-
-# In[21]:
-
 test_sample.writeto('test_ids_cannon.fits')
-
-
-# In[22]:
 
 col1 = fits.Column(name='APOGEE_ID', format='18A', array=np.asarray(no_twin)[:,0])
 col2 = fits.Column(name='RA', format='D', array=np.asarray(no_twin)[:,1])
 col3 = fits.Column(name='DEC', format='D', array=np.asarray(no_twin)[:,2])
-
-
-# In[23]:
-
 cols = fits.ColDefs([col1, col2, col3])
+lonely_sample = fits.BinTableHDU.from_columns(cols)
+lonely_sample.writeto('troup_lonely_ids.fits')
 
 
-# In[24]:
-
-test_sample = fits.BinTableHDU.from_columns(cols)
-
-
-# In[25]:
-
-test_sample.writeto('troup_lonely_ids.fits')
-
-
-# In[ ]:
 
 
 
